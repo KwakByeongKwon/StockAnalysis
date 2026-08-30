@@ -1,72 +1,77 @@
-# StockAnalysis - 국내 주식 정보 수집 및 차트 분석 시스템
+# 📈 StockAnalysis PRO (한국형 퀀트 & AI 주가 예측 시스템)
 
-`.agents` 및 `AGENTS.md` 가이드라인(방어적 프로그래밍, SRP, Pydantic 스키마 검증, Parquet 캐싱, KST 타임존 보존)을 준수하여 개발된 국내 주식(KOSPI / KOSDAQ) 실시간 시세 및 기술적 차트 분석 대시보드입니다.
-
----
-
-## 🚀 빠른 시작 가이드 (Quick Start)
-
-### 1. 가상환경 및 의존성 설치
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Streamlit 대시보드 실행
-```bash
-streamlit run app.py
-```
-
-### 3. 단위 테스트 실행
-```bash
-pytest -v
-```
+대한민국 상장 전종목(2,700+개) 실시간 시세, SQLite 고속 영구 시계열 저장소, 차트·재무·뉴스 종합 Google Gemini AI 주가 등락 예측 및 과거 적중률(Hit Rate) 백테스팅을 제공하는 현대적인 풀스택 주식 분석 웹 애플리케이션입니다.
 
 ---
 
-## 🏗️ 아키텍처 및 디렉토리 구조
+## 🌟 핵심 기능
+
+1. **📊 한국형 고성능 차트 (Lightweight Charts)**:
+   - 일봉, 주봉, 월봉, 분봉(1m~60m) 실시간 캔들 차트
+   - 5/20/60/120일 이동평균선, 볼린저 밴드, 거래량, RSI, MACD 보조지표
+   - 마우스 커서 추적 실시간 HTS 플로팅 정보 박스 (종가, 5/20/60/120선 실시간 노출)
+   - 드래그 좌우 이동(Pan) 바운더리 클램프 & `Ctrl + 휠` 마우스 중심 줌(Zoom)
+2. **🤖 Google Gemini AI 주가 등락 예측 & 3대 심층 리포트**:
+   - **예측 게이지**: 단기(5~10일) 상승(UP) / 하락(DOWN) 확률(%) 및 예상 목표가 산출
+   - **과거 예측 적중률**: 최근 10회차 예측 백테스트 및 실제 적중률(Hit Rate) 테이블
+   - **3대 분석 카드**: 차트 기술적 지표(40%) + 기업 재무 보고서(30%) + 실시간 뉴스 감성(30%)
+3. **🏆 국내 전종목(2,700+개) 실시간 시장 랭킹 & 종목 발굴기**:
+   - 코스피(1,200개) + 코스닥(1,500개) 전체 상장사 실시간 랭킹
+   - 🔥 거래량 상위 | 🚀 상승률 상위 | 💎 시가총액 상위 3대 핵심 탭
+   - 50/100/200개씩 보기 및 1~54페이지 완벽 페이지네이션
+   - 전종목 실시간 스마트 검색 및 원클릭 차트 분석 연동
+4. **💾 오프라인-퍼스트 SQLite 고속 영구 저장소 & 온디맨드 증분 동기화**:
+   - 첫 조회 시 SQLite DB에 영구 저장 -> 이후 네트워크 0회, 0.001초 로컬 초고속 로드
+   - `[데이터 최신화]` 버튼 클릭 시 이전 동기화 시점부터 오늘까지의 최신 데이터만 증분 UPSERT 병합
+
+---
+
+## 🛠️ 기술 스택
+
+- **Frontend / Framework**: Next.js 16 (App Router / Turbopack), React 19, TypeScript
+- **Styling**: Tailwind CSS v4, Lucide React Icons
+- **Charting**: TradingView `lightweight-charts` v5
+- **Database**: Node.js Native SQLite (`node:sqlite` DatabaseSync, WAL Mode)
+- **AI Engine**: Google Gemini API (`gemini-2.0-flash` / `gemini-1.5-flash`) + Quantitative Multi-Factor Engine
+- **Data Source**: 네이버 금융 실시간 공인 시세 피드 & 과거 3,000개 캔들 시계열
+
+---
+
+## 🚀 빠른 시작
+
+### 1. 패키지 설치
+```bash
+cd stock-analysis-charts
+npm install
+```
+
+### 2. 환경변수 설정 (`stock-analysis-charts/.env.local`)
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### 3. 개발 서버 실행
+```bash
+npm run dev
+```
+브라우저에서 `http://localhost:3000` 접속
+
+---
+
+## 📁 프로젝트 구조
 
 ```
 StockAnalysis/
-├── app.py                      # Streamlit 웹 대시보드 메인 엔트리포인트
-├── requirements.txt            # 의존성 패키지 명세
-├── pytest.ini                  # pytest 설정
 ├── data/
-│   └── cache/                  # Parquet 시계열 데이터 캐시 (.parquet)
-├── src/
-│   ├── config.py               # 시스템 환경설정 및 KST 타임존 관리
-│   ├── models/
-│   │   ├── __init__.py
-│   │   └── stock.py            # Pydantic v2 데이터 모델 (StockSummary, OHLCVBar 등)
-│   ├── data/
-│   │   ├── __init__.py
-│   │   ├── collector.py        # 네이버 금융/KRX 데이터 수집 어댑터
-│   │   └── repository.py       # Cache-first 데이터 통합 레포지토리
-│   ├── storage/
-│   │   ├── __init__.py
-│   │   └── cache_manager.py    # Apache Parquet 고성능 로컬 캐시 매니저
-│   └── ui/
-│       └── components/
-│           ├── __init__.py
-│           ├── chart.py        # Plotly 기반 캔들스틱/이동평균/거래량 차트
-│           └── metrics.py      # 실시간 시세 & 팩터 메트릭 카드
-└── tests/
-    ├── test_models.py          # Pydantic 모델 단위 테스트
-    ├── test_collector.py       # API 수집 및 OHLCV 데이터 무결성 테스트
-    └── test_cache.py           # Parquet 캐싱 및 증분 업데이트 테스트
+│   └── stock_analysis.db      # 2,700개 전종목 OHLCV 및 시세 SQLite 영구 DB
+└── stock-analysis-charts/     # Next.js 16 풀스택 웹 애플리케이션
+    ├── app/                   # App Router (페이지 및 API 라우트)
+    │   ├── api/               # 시세, 캔들, 랭킹, 동기화, Gemini AI 라우트
+    │   └── page.tsx           # 메인 대시보드
+    ├── components/            # React UI 및 차트 컴포넌트
+    │   ├── candle-chart.tsx   # HTS 스타일 캔들 차트
+    │   ├── ai-consensus-panel.tsx # Gemini AI 주가 예측 & 3대 리포트 패널
+    │   ├── market-screener.tsx    # 전종목 실시간 랭킹 스크리너
+    │   └── top-bar.tsx        # 상단 검색창 & 데이터 최신화 버튼
+    └── lib/                   # 비즈니스 로직, SQLite DB 매니저, AI 서비스
 ```
-
----
-
-## 🌟 주요 기능 (Key Features)
-
-1. **국내 전 종목 실시간 검색 및 시세 조회**:
-   - KOSPI, KOSDAQ 상장 전 종목(2,800+개) 마스터 검색 지원
-   - 현재가, 전일대비, 등락률, 시가총액, PER, PBR, 52주 최고/최저가 등 실시간 요약
-2. **프로급 인터랙티브 캔들스틱 차트 (Plotly)**:
-   - 한국 주식 시장 컬러 컨벤션 적용 (상승 빨강, 하락 파랑)
-   - 이동평균선(MA 5/20/60/120), 거래량 이동평균, 볼린저 밴드 오버레이
-   - 기간별(1M, 3M, 6M, 1Y, 3Y, ALL) 줌 & 인터랙티브 툴팁 호버
-3. **고성능 로컬 Parquet 캐싱**:
-   - `pyarrow` 기반 압축 저장으로 네트워크 비용 및 지연시간 최소화
-   - 증분 업데이트(Incremental Sync)로 과거 데이터 누락 없이 최신 시세 병합
-   - 시계열 원본 데이터 CSV 및 Parquet 다운로드 지원

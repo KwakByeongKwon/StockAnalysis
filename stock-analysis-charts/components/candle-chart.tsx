@@ -139,7 +139,14 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       autoSize: true,
     })
 
-    // 1. 캔들 시리즈
+    // 공통 천 단위 콤마(,) 가격 포맷터
+    const KRW_PRICE_FORMAT = {
+      type: "custom" as const,
+      minMove: 1,
+      formatter: (price: number) => Math.round(price).toLocaleString("ko-KR"),
+    }
+
+    // 1. 캔들 시리즈 (Y축 눈금 및 크로스헤어에 콤마 적용)
     const candleSeries = chart.addSeries(CandlestickSeries, {
       upColor: UP_COLOR,
       downColor: DOWN_COLOR,
@@ -147,7 +154,7 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       borderDownColor: DOWN_COLOR,
       wickUpColor: UP_COLOR,
       wickDownColor: DOWN_COLOR,
-      priceFormat: { type: "price", precision: 0, minMove: 1 },
+      priceFormat: KRW_PRICE_FORMAT,
     })
 
     // 2. 거래량 시리즈
@@ -166,6 +173,7 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       title: "MA5",
       priceLineVisible: false,
       lastValueVisible: false,
+      priceFormat: KRW_PRICE_FORMAT,
     })
     const ma20 = chart.addSeries(LineSeries, {
       color: "#f59e0b", // 주황/황금 (20일선 생명선)
@@ -173,6 +181,7 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       title: "MA20",
       priceLineVisible: false,
       lastValueVisible: false,
+      priceFormat: KRW_PRICE_FORMAT,
     })
     const ma60 = chart.addSeries(LineSeries, {
       color: "#8b5cf6", // 보라 (60일선 수급선)
@@ -180,6 +189,7 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       title: "MA60",
       priceLineVisible: false,
       lastValueVisible: false,
+      priceFormat: KRW_PRICE_FORMAT,
     })
     const ma120 = chart.addSeries(LineSeries, {
       color: "#64748b", // 그레이 (120일선 경기선)
@@ -187,6 +197,7 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       title: "MA120",
       priceLineVisible: false,
       lastValueVisible: false,
+      priceFormat: KRW_PRICE_FORMAT,
     })
 
     // 4. 볼린저 밴드(Upper, Middle, Lower)
@@ -197,6 +208,7 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       title: "BB Upper",
       priceLineVisible: false,
       lastValueVisible: false,
+      priceFormat: KRW_PRICE_FORMAT,
     })
     const bbMiddle = chart.addSeries(LineSeries, {
       color: "rgba(59, 130, 246, 0.9)",
@@ -204,6 +216,7 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       title: "BB Mid",
       priceLineVisible: false,
       lastValueVisible: false,
+      priceFormat: KRW_PRICE_FORMAT,
     })
     const bbLower = chart.addSeries(LineSeries, {
       color: "rgba(59, 130, 246, 0.6)",
@@ -212,6 +225,7 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
       title: "BB Lower",
       priceLineVisible: false,
       lastValueVisible: false,
+      priceFormat: KRW_PRICE_FORMAT,
     })
 
     // 마우스 커서 호버 시 해당 일자 상세 데이터 및 커서 좌표(x, y) 실시간 추적
