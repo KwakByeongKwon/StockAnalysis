@@ -34,7 +34,7 @@ export function TopBar({ selectedCode, lastSyncedAt, onSelect, onSynced }: Props
           <div className="flex-1 max-w-md">
             <StockSearch selectedCode={selectedCode} onSelect={onSelect} />
           </div>
-          <div className="shrink-0 hidden sm:block">
+          <div className="shrink-0">
             <SyncButton
               selectedCode={selectedCode}
               lastSyncedAt={lastSyncedAt}

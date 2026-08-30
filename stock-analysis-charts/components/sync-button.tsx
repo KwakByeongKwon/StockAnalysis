@@ -47,13 +47,12 @@ export function SyncButton({ selectedCode, lastSyncedAt, onSynced }: Props) {
     }
   }
 
-  // 동기화 버튼 클릭 시점 또는 DB에서 넘어온 이전 동기화 일시
   const activeTimeStr = formatSyncTime(syncedTime || lastSyncedAt)
 
   return (
-    <div className="flex items-center gap-2.5 shrink-0 whitespace-nowrap">
-      {/* 🟢 한 줄 인라인 이전 동기화 일시 뱃지 (YYYY-MM-DD HH:mm:ss) */}
-      <div className="hidden sm:flex items-center gap-1.5 rounded-lg bg-muted/60 px-3 py-1.5 text-xs border border-border/70 shadow-2xs">
+    <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 whitespace-nowrap">
+      {/* 데스크톱 전용 동기화 일시 뱃지 */}
+      <div className="hidden md:flex items-center gap-1.5 rounded-lg bg-muted/60 px-2.5 py-1.5 text-xs border border-border/70 shadow-2xs">
         <span className="size-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden />
         <Clock className="size-3 text-muted-foreground" />
         <span className="font-mono text-[11px] font-semibold text-foreground">
@@ -61,16 +60,16 @@ export function SyncButton({ selectedCode, lastSyncedAt, onSynced }: Props) {
         </span>
       </div>
 
-      {/* 데이터 최신화 버튼 */}
+      {/* 데이터 최신화 버튼 (모바일에서는 심플 아이콘, 데스크톱에서는 텍스트 포함) */}
       <button
         type="button"
         onClick={sync}
         disabled={loading}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground shadow-xs transition-all hover:bg-primary/90 active:scale-95 disabled:opacity-60 whitespace-nowrap"
-        title="이전 동기화 시점부터 오늘까지의 최신 데이터만 증분 최신화"
+        className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-2.5 sm:px-3 py-1.5 text-xs font-bold text-primary-foreground shadow-xs transition-all hover:bg-primary/90 active:scale-95 disabled:opacity-60 cursor-pointer"
+        title="이전 동기화 시점부터 오늘까지의 최신 데이터 증분 최신화"
       >
         <RefreshCw className={cn("size-3.5", loading && "animate-spin")} aria-hidden />
-        <span>{loading ? "최신화 중..." : "데이터 최신화"}</span>
+        <span className="hidden sm:inline">{loading ? "최신화 중..." : "데이터 최신화"}</span>
       </button>
     </div>
   )
