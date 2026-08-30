@@ -32,7 +32,7 @@ export function AppSidebar({
   return (
     <aside
       className={cn(
-        "relative flex flex-col border-r border-border/80 bg-card transition-all duration-200 z-20 shrink-0 select-none",
+        "relative hidden md:flex flex-col border-r border-border/80 bg-card transition-all duration-200 z-20 shrink-0 select-none",
         isCollapsed ? "w-16" : "w-60",
       )}
     >

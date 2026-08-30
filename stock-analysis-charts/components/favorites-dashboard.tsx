@@ -194,20 +194,20 @@ export function FavoritesDashboard({ favorites, onSelectStock, onToggleFavorite 
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
       {/* 🌟 메인 헤더 & 즐겨찾기 종목 추가 검색 바 */}
-      <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
-              <Star className="size-6 fill-amber-500" />
+            <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">
+              <Star className="size-5 sm:size-6 fill-amber-500" />
             </div>
             <div>
-              <h1 className="text-xl font-black text-foreground">
+              <h1 className="text-base sm:text-xl font-black text-foreground">
                 나의 즐겨찾기 포트폴리오
               </h1>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                등록된 관심종목의 <b>실시간 시세와 Google Gemini AI 주가 등락 예측</b>을 한눈에 모아봅니다. (종목 카드를 클릭하면 정밀 분석으로 이동합니다)
+              <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">
+                등록된 관심종목의 <b>실시간 시세와 Google Gemini AI 주가 등락 예측</b>을 한눈에 모아봅니다.
               </p>
             </div>
           </div>

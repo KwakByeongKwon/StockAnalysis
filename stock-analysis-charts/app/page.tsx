@@ -7,6 +7,7 @@ import { AppSidebar, type NavViewMode } from "@/components/app-sidebar"
 import { CandleChart } from "@/components/candle-chart"
 import { FavoritesDashboard } from "@/components/favorites-dashboard"
 import { MarketScreener } from "@/components/market-screener"
+import { MobileBottomNav } from "@/components/mobile-bottom-nav"
 import { MockTradingDashboard } from "@/components/mock-trading-dashboard"
 import { OrderBook } from "@/components/order-book"
 import { QuickPills } from "@/components/quick-pills"
@@ -351,7 +352,7 @@ export default function Page() {
           )}
 
           {/* 푸터 */}
-          <footer className="mt-8 border-t border-border/60 py-6 text-center text-xs text-muted-foreground">
+          <footer className="mt-8 border-t border-border/60 py-6 text-center text-xs text-muted-foreground pb-12 md:pb-6">
             <p>
               StockAnalysis PRO · 대한민국 실시간 증권 데이터 및 SQLite 고속 퀀트 시계열 저장소
             </p>
@@ -360,6 +361,13 @@ export default function Page() {
             </p>
           </footer>
         </main>
+
+        {/* 📱 스마트폰 전용 하단 고정 네비게이션 탭 바 */}
+        <MobileBottomNav
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          favoritesCount={favorites.length}
+        />
       </div>
     </div>
   )
