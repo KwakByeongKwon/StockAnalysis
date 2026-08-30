@@ -20,7 +20,7 @@ export function MobileBottomNav({ viewMode, setViewMode, favoritesCount }: Props
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-border/80 bg-card/95 backdrop-blur-xl px-2 py-1.5 shadow-2xl safe-area-bottom"
+      className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border/80 bg-card/95 backdrop-blur-xl px-2 py-2 shadow-2xl safe-area-bottom pointer-events-auto"
       aria-label="모바일 하단 네비게이션"
     >
       <div className="grid grid-cols-4 items-center justify-around gap-1">

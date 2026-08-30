@@ -16,6 +16,7 @@ import {
   TrendingUp,
 } from "lucide-react"
 import { fetcher } from "@/lib/fetcher"
+import { STOCK_MASTER } from "@/lib/stock-master"
 import type { AIPredictionReport, Quote, StockMeta } from "@/lib/types"
 import { formatKRW, formatVolume } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -26,7 +27,7 @@ type Props = {
   onToggleFavorite: (code: string) => void
 }
 
-// 각 즐겨찾기 종목의 시세 및 AI 예측 미니 카드 컴포넌트 (카드 전체 클릭 지원)
+// 각 즐겨찾기 종목의 시세 및 AI 예측 미니 카드 컴포넌트
 function FavoriteCard({
   code,
   onSelect,
@@ -36,96 +37,104 @@ function FavoriteCard({
   onSelect: (code: string) => void
   onRemove: (code: string) => void
 }) {
-  const { data: quoteData } = useSWR<{ quote: Quote }>(`/api/stocks/${code}/quote`, fetcher)
+  const stockMeta = STOCK_MASTER.find((s) => s.code === code)
+  const defaultName = stockMeta?.name || code
+  const defaultMarket = stockMeta?.market || "KOSPI"
+
+  const { data: quoteData, isLoading: isQuoteLoading } = useSWR<{ quote: Quote }>(
+    `/api/stocks/${code}/quote`,
+    fetcher,
+    { revalidateOnFocus: false, dedupingInterval: 10000 },
+  )
   const { data: aiData } = useSWR<{ prediction: AIPredictionReport }>(
     `/api/stocks/${code}/ai`,
     fetcher,
+    { revalidateOnFocus: false, dedupingInterval: 30000 },
   )
 
   const quote = quoteData?.quote
   const prediction = aiData?.prediction
 
-  if (!quote) {
-    return (
-      <div className="rounded-xl border border-border bg-card p-5 shadow-xs animate-pulse min-h-[180px] flex items-center justify-center text-xs text-muted-foreground">
-        종목 데이터 로드 중 ({code})...
-      </div>
-    )
-  }
-
-  const isUp = quote.change >= 0
+  const price = quote?.price || 0
+  const change = quote?.change || 0
+  const changeRate = quote?.changeRate || 0
+  const isUp = change >= 0
   const isAiUp = prediction?.direction === "UP"
 
   return (
     <div
       onClick={() => onSelect(code)}
-      className="group relative rounded-xl border border-border/80 bg-card p-5 shadow-xs transition-all hover:border-primary/80 hover:shadow-lg hover:scale-[1.01] flex flex-col justify-between cursor-pointer"
-      title={`${quote.name} 클릭 시 정밀 차트 & Gemini AI 분석 화면으로 이동합니다`}
+      className="group relative rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-xs transition-all hover:border-primary/80 hover:shadow-lg active:scale-[0.98] flex flex-col justify-between cursor-pointer"
+      title={`${defaultName} 클릭 시 정밀 차트 & Gemini AI 분석 화면으로 이동합니다`}
     >
       {/* 상단: 종목명, 시장, 즐겨찾기 해제 버튼 */}
       <div className="flex items-start justify-between gap-2 border-b border-border/60 pb-3">
         <div>
           <div className="flex items-center gap-2">
             <h3 className="text-base font-black text-foreground group-hover:text-primary transition-colors">
-              {quote.name}
+              {quote?.name || defaultName}
             </h3>
             <span
               className={cn(
                 "rounded px-1.5 py-0.2 text-[10px] font-bold font-mono",
-                quote.market === "KOSPI"
-                  ? "bg-accent text-accent-foreground"
-                  : "bg-secondary text-secondary-foreground",
+                defaultMarket === "KOSPI"
+                  ? "bg-blue-500/10 text-blue-500 border border-blue-500/20"
+                  : "bg-purple-500/10 text-purple-500 border border-purple-500/20",
               )}
             >
-              {quote.market}
+              {defaultMarket}
             </span>
           </div>
-          <span className="font-mono text-xs text-muted-foreground">{quote.code}</span>
+          <span className="font-mono text-xs text-muted-foreground">{code}</span>
         </div>
 
-        {/* 즐겨찾기 별표 버튼 (클릭 시 카드 전체 클릭 이벤트 전파 차단) */}
+        {/* 즐겨찾기 해제 버튼 */}
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation()
             onRemove(code)
           }}
-          className="text-amber-500 hover:text-muted-foreground p-1.5 rounded-md hover:bg-muted/80 transition-colors z-10 cursor-pointer"
+          className="flex size-7 items-center justify-center rounded-lg border border-border/80 bg-background/80 hover:bg-rose-500/10 hover:border-rose-500/30 text-amber-500 hover:text-rose-500 transition-colors cursor-pointer"
           title="즐겨찾기에서 제거"
         >
           <Star className="size-4 fill-amber-500" />
         </button>
       </div>
 
-      {/* 중단: 현재가 및 등락률 */}
-      <div className="my-3 flex items-baseline justify-between">
-        <div>
-          <div className="text-2xl font-black font-mono text-foreground">
-            {formatKRW(quote.price)}원
+      {/* 중앙: 실시간 현재가 및 등락률 */}
+      <div className="my-3">
+        {isQuoteLoading && !quote ? (
+          <div className="space-y-1.5 py-1">
+            <div className="h-6 w-24 bg-muted animate-pulse rounded" />
+            <div className="h-4 w-32 bg-muted animate-pulse rounded" />
           </div>
-          <div
-            className={cn(
-              "flex items-center gap-1 text-xs font-bold font-mono mt-0.5",
-              isUp ? "text-[var(--up)]" : "text-[var(--down)]",
+        ) : (
+          <div>
+            <div className="text-2xl font-black font-mono tracking-tight text-foreground">
+              {price > 0 ? `${formatKRW(price)}원` : "시세 수신 중..."}
+            </div>
+            {price > 0 && (
+              <div
+                className={cn(
+                  "flex items-center gap-1 text-xs font-bold font-mono mt-1",
+                  isUp ? "text-[var(--up)]" : "text-[var(--down)]",
+                )}
+              >
+                {isUp ? <ArrowUpRight className="size-4" /> : <ArrowDownRight className="size-4" />}
+                <span>
+                  {isUp ? "+" : ""}
+                  {formatKRW(change)}원 ({isUp ? "+" : ""}
+                  {changeRate}%)
+                </span>
+              </div>
             )}
-          >
-            {isUp ? <ArrowUpRight className="size-3.5" /> : <ArrowDownRight className="size-3.5" />}
-            <span>
-              {isUp ? "+" : ""}
-              {formatKRW(quote.change)}원 ({isUp ? "+" : ""}
-              {quote.changeRate.toFixed(2)}%)
-            </span>
           </div>
-        </div>
-
-        <div className="text-right text-[11px] text-muted-foreground font-mono">
-          <div>거래량 {formatVolume(quote.volume)}</div>
-          <div>PER {quote.per ? `${quote.per}배` : "-"}</div>
-        </div>
+        )}
       </div>
 
-      {/* 하단: AI 주가 등락 예측 요약 */}
-      <div className="mt-2 rounded-lg bg-muted/40 p-2.5 border border-border/70 flex flex-col gap-1.5">
+      {/* 하단: AI 예측 정보 & 진입 버튼 */}
+      <div className="rounded-xl border border-border/60 bg-muted/30 p-2.5 space-y-1.5">
         <div className="flex items-center justify-between text-xs">
           <span className="flex items-center gap-1 font-bold text-foreground">
             <Sparkles className="size-3 text-primary" /> Gemini AI 예측:
@@ -140,7 +149,7 @@ function FavoriteCard({
               {prediction.directionLabel} ({prediction.probability}%)
             </span>
           ) : (
-            <span className="text-[10px] text-muted-foreground animate-pulse">분석 중...</span>
+            <span className="text-[10px] text-muted-foreground animate-pulse">분석 대기 중...</span>
           )}
         </div>
 
@@ -155,9 +164,9 @@ function FavoriteCard({
       </div>
 
       {/* 차트 & 퀀트 분석 바로가기 버튼 */}
-      <div className="mt-3.5 w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary/10 group-hover:bg-primary px-3 py-2 text-xs font-bold text-primary group-hover:text-primary-foreground transition-all shadow-2xs">
+      <div className="mt-3 w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary/10 group-hover:bg-primary px-3 py-2 text-xs font-bold text-primary group-hover:text-primary-foreground transition-all shadow-2xs">
         <BarChart2 className="size-3.5" />
-        <span>정밀 차트 & AI 리포트 보기</span>
+        <span>정밀 차트 & 리포트 보기</span>
       </div>
     </div>
   )
@@ -274,7 +283,7 @@ export function FavoritesDashboard({ favorites, onSelectStock, onToggleFavorite 
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {favorites.map((code) => (
             <FavoriteCard
               key={code}
