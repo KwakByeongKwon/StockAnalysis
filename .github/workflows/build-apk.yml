@@ -24,7 +24,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: 'platforms;android-35 build-tools;35.0.0'
+          packages: 'platforms;android-36 build-tools;36.0.0'
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
@@ -33,7 +33,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: stock-analysis-charts/package-lock.json
 
-      - name: Install Dependencies & Copy Web Assets
+      - name: Install Dependencies & Sync Web Assets
         run: |
           cd stock-analysis-charts
           npm install
