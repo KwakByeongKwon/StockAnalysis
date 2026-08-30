@@ -46,6 +46,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <PinLockGate>
           <PwaInstallBanner />
+          <MobileAppGuards />
           {children}
         </PinLockGate>
         {process.env.NODE_ENV === 'production' && <Analytics />}
