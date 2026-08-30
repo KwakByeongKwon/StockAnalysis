@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Noto_Sans_KR, Geist_Mono } from 'next/font/google'
+import { MobileAppGuards } from '@/components/mobile-app-guards'
 import { PinLockGate } from '@/components/pin-lock-gate'
 import { PwaInstallBanner } from '@/components/pwa-install-banner'
 import './globals.css'
