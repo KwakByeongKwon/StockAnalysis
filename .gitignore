@@ -1,62 +1,73 @@
-# Antigravity & IDE Artifacts
-.antigravity/
-.agents/
-.gemini/
-.brain/
-*.log
+# ==============================================================================
+# StockAnalysis Git Ignore Rules
+# ==============================================================================
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
+# 1. Local Database & Time-series Caches (로컬 DB 및 시계열 캐시)
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/*.sqlite
+data/*.sqlite3
+data/cache/
+data/temp/
+*.parquet
+*.db
+*.db-wal
+*.db-shm
+
+# 2. Node & Next.js Build Outputs (의존성 및 빌드 아티팩트)
+node_modules/
+stock-analysis-charts/node_modules/
+.next/
+stock-analysis-charts/.next/
+out/
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
 
-# Virtual Environments
-.venv/
-venv/
-ENV/
-env/
-
-# Environment Variables & Secrets
+# 3. Environment Variables & API Secrets (보안 키 및 환경 변수)
 .env
 .env.local
-.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
 *.pem
 *.key
+stock-analysis-charts/.env.local
 
-# Testing & Coverage
-.pytest_cache/
-.coverage
-.coverage.*
-htmlcov/
+# 4. Logs & Debugging (로그 파일)
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Editor & OS
+# 5. OS & Editor Metadata (운영체제 및 IDE 설정)
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
 *.swp
 *.swo
-.DS_Store
-Thumbs.db
-
-# Data & Local Caches
-data/cache/
-data/temp/
 *.tmp
+
+# 6. Antigravity & AI Brain Artifacts
+.antigravity/
+.agents/
+.gemini/
+.brain/
+.snowflake/
+.v0-trash/
+.vercel/
+
+# 7. Legacy Python Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+.venv/
+venv/

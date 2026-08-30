@@ -7,6 +7,7 @@ import { AppSidebar, type NavViewMode } from "@/components/app-sidebar"
 import { CandleChart } from "@/components/candle-chart"
 import { FavoritesDashboard } from "@/components/favorites-dashboard"
 import { MarketScreener } from "@/components/market-screener"
+import { MockTradingDashboard } from "@/components/mock-trading-dashboard"
 import { OrderBook } from "@/components/order-book"
 import { QuickPills } from "@/components/quick-pills"
 import { QuoteHeader } from "@/components/quote-header"
@@ -175,17 +176,23 @@ export default function Page() {
 
           {/* 3. 사이드바 메뉴별 조건부 렌더링 */}
           {viewMode === "favorites" ? (
-            /* ⭐ 메인 화면: 나의 즐겨찾기 포트폴리오 대시보드 */
+            /* ⭐ 1. 메인 화면: 나의 즐겨찾기 포트폴리오 대시보드 */
             <FavoritesDashboard
               favorites={favorites}
               onSelectStock={handleSelectStock}
               onToggleFavorite={toggleFavorite}
             />
           ) : viewMode === "screener" ? (
-            /* 🏆 전체 시장 랭킹 & 종목 발굴기 화면 */
+            /* 🏆 2. 전체 시장 랭킹 & 종목 발굴기 화면 */
             <MarketScreener onSelectStock={handleSelectStock} />
+          ) : viewMode === "trading" ? (
+            /* 💼 3. 실전 모의투자 랩 (1억 원 시뮬레이터) 화면 */
+            <MockTradingDashboard
+              initialCode={selectedCode}
+              onSelectStockForAnalysis={handleSelectStock}
+            />
           ) : (
-            /* 📊 정밀 차트 & 퀀트 분석 대시보드 화면 (전체 캡처 대상 영역) */
+            /* 📊 4. 정밀 차트 & 퀀트 분석 대시보드 화면 (전체 캡처 대상 영역) */
             <div id="analysis-dashboard-area" className="flex flex-col gap-4">
               {/* 현재가 / 등락률 / 보고서 형태로 저장 헤더 */}
               {quote && (

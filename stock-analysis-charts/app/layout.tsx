@@ -1,6 +1,8 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Noto_Sans_KR, Geist_Mono } from 'next/font/google'
+import { PinLockGate } from '@/components/pin-lock-gate'
+import { PwaInstallBanner } from '@/components/pwa-install-banner'
 import './globals.css'
 
 const notoSansKr = Noto_Sans_KR({
@@ -11,34 +13,27 @@ const notoSansKr = Noto_Sans_KR({
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
 
 export const metadata: Metadata = {
-  title: '삼성전자 (005930) · 주식 분석',
-  description: '실시간 시세와 차트로 보는 깔끔한 주식 분석 대시보드',
-  generator: 'v0.app',
+  title: 'StockAnalysis PRO · 실전 주식 분석 & 모의투자',
+  description: '네이버 실시간 시세 기반 2,700개 전종목 분석, AI 주가 예측 및 1억 원 실전 모의투자 터미널',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: '주식분석PRO',
+  },
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/icon-192.png',
+    apple: '/apple-touch-icon.png',
   },
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: '#09090b',
 }
 
 export default function RootLayout({
@@ -49,7 +44,10 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`bg-background ${notoSansKr.variable} ${geistMono.variable}`}>
       <body className="font-sans antialiased">
-        {children}
+        <PinLockGate>
+          <PwaInstallBanner />
+          {children}
+        </PinLockGate>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

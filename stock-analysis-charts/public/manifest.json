@@ -1,0 +1,24 @@
+{
+  "name": "StockAnalysis PRO - 실전 주식 분석 & 모의투자",
+  "short_name": "주식분석PRO",
+  "description": "네이버 실시간 시세 기반 2,700개 전종목 분석, AI 주가 예측 및 1억 원 실전 모의투자 터미널",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -4,7 +4,6 @@ import {
   BarChart3,
   ChevronLeft,
   ChevronRight,
-  FlaskConical,
   PanelLeftClose,
   PanelLeftOpen,
   PieChart,
@@ -13,7 +12,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export type NavViewMode = "favorites" | "dashboard" | "screener"
+export type NavViewMode = "favorites" | "dashboard" | "screener" | "trading"
 
 type Props = {
   viewMode: NavViewMode
@@ -194,36 +193,53 @@ export function AppSidebar({
               </div>
             )}
           </button>
-        </div>
 
-        {/* 그룹 2: 향후 순차 추가 확장 기능 슬롯 */}
-        <div className="space-y-1 border-t border-border/60 pt-4">
-          {!isCollapsed && (
-            <div className="px-2 pb-1.5 text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground">
-              스마트 퀀트 랩 (확장 슬롯)
-            </div>
-          )}
-
-          {/* 🧪 퀀트 백테스팅 랩 */}
-          <div
+          {/* 💼 4. 실전 모의투자 랩 (NEW) */}
+          <button
+            type="button"
+            onClick={() => setViewMode("trading")}
             className={cn(
-              "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium text-muted-foreground/60 select-none",
+              "group relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold transition-all cursor-pointer",
+              viewMode === "trading"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:bg-muted/80 hover:text-foreground",
               isCollapsed && "justify-center px-0 py-3",
             )}
-            title="퀀트 백테스팅 엔진 (순차 추가 예정)"
+            title="실전 모의투자 랩 (1억 원 가상 시뮬레이터)"
           >
-            <FlaskConical className="size-4 shrink-0 text-muted-foreground/50" />
+            <PieChart
+              className={cn(
+                "size-4 shrink-0 transition-transform group-hover:scale-110",
+                viewMode !== "trading" && "text-emerald-500",
+              )}
+            />
             {!isCollapsed && (
-              <div className="flex flex-1 items-center justify-between">
-                <span>퀀트 백테스트</span>
-                <span className="rounded bg-muted px-1.5 py-0.2 text-[9px] font-bold text-muted-foreground">
-                  준비중
+              <div className="flex flex-1 items-center justify-between overflow-hidden">
+                <span className="truncate">실전 모의투자</span>
+                <span
+                  className={cn(
+                    "rounded px-1.5 py-0.2 text-[10px] font-extrabold font-mono",
+                    viewMode === "trading"
+                      ? "bg-background/20 text-primary-foreground"
+                      : "bg-emerald-500/10 text-emerald-500",
+                  )}
+                >
+                  1억 원
                 </span>
               </div>
             )}
-          </div>
+          </button>
+        </div>
 
-          {/* 💼 AI 포트폴리오 최적화 */}
+        {/* 그룹 2: 스마트 퀀트 랩 */}
+        <div className="space-y-1 border-t border-border/60 pt-4">
+          {!isCollapsed && (
+            <div className="px-2 pb-1.5 text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground">
+              스마트 퀀트 랩
+            </div>
+          )}
+
+          {/* 💼 1. AI 포트폴리오 최적화 */}
           <div
             className={cn(
               "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium text-muted-foreground/60 select-none",
