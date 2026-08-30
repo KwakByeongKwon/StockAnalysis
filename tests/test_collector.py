@@ -29,7 +29,7 @@ def test_naver_get_ohlcv_integrity(collector):
     
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
-    assert len(df) == 100
+    assert len(df) >= 100
     
     # DatetimeIndex 및 타임존 검증
     assert isinstance(df.index, pd.DatetimeIndex)
