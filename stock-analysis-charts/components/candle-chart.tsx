@@ -618,31 +618,31 @@ export function CandleChart({ candles, indicators, toggles, timeframe }: Props) 
         )}
 
         {/* 📌 상단 고정 이평선 범례 */}
-        <div className="pointer-events-none absolute left-3 top-3 flex flex-wrap items-center gap-2 rounded-lg bg-background/85 px-2.5 py-1.5 text-[11px] font-mono shadow-xs backdrop-blur-sm border border-border/60">
+        <div className="pointer-events-none absolute left-2 top-2 sm:left-3 sm:top-3 flex items-center gap-1.5 sm:gap-2 rounded-lg bg-background/90 px-2 py-1 text-[10px] sm:text-[11px] font-mono shadow-xs backdrop-blur-md border border-border/70 max-w-[90%] overflow-x-auto whitespace-nowrap">
           {toggles.ma && (
             <>
               <span className="flex items-center gap-1 text-[#10b981] font-bold" title="5일 이동평균선">
-                <span className="inline-block size-2 rounded-full bg-[#10b981]" />
-                MA5 <span className="font-sans font-normal text-[10px] text-muted-foreground">(5일선)</span>
+                <span className="inline-block size-1.5 sm:size-2 rounded-full bg-[#10b981]" />
+                MA5<span className="hidden sm:inline font-sans font-normal text-[10px] text-muted-foreground">(5일선)</span>
               </span>
               <span className="flex items-center gap-1 text-[#f59e0b] font-bold" title="20일 이동평균선">
-                <span className="inline-block size-2 rounded-full bg-[#f59e0b]" />
-                MA20 <span className="font-sans font-normal text-[10px] text-muted-foreground">(20일 생명선)</span>
+                <span className="inline-block size-1.5 sm:size-2 rounded-full bg-[#f59e0b]" />
+                MA20<span className="hidden sm:inline font-sans font-normal text-[10px] text-muted-foreground">(20일선)</span>
               </span>
-              <span className="flex items-center gap-1 text-[#8b5cf6] font-bold" title="60일 이동평균선">
-                <span className="inline-block size-2 rounded-full bg-[#8b5cf6]" />
-                MA60 <span className="font-sans font-normal text-[10px] text-muted-foreground">(60일 수급선)</span>
+              <span className="hidden xs:flex items-center gap-1 text-[#8b5cf6] font-bold" title="60일 이동평균선">
+                <span className="inline-block size-1.5 sm:size-2 rounded-full bg-[#8b5cf6]" />
+                MA60<span className="hidden sm:inline font-sans font-normal text-[10px] text-muted-foreground">(60일선)</span>
               </span>
-              <span className="flex items-center gap-1 text-[#64748b] font-bold" title="120일 이동평균선">
-                <span className="inline-block size-2 rounded-full bg-[#64748b]" />
-                MA120 <span className="font-sans font-normal text-[10px] text-muted-foreground">(120일 경기선)</span>
+              <span className="hidden md:flex items-center gap-1 text-[#64748b] font-bold" title="120일 이동평균선">
+                <span className="inline-block size-1.5 sm:size-2 rounded-full bg-[#64748b]" />
+                MA120
               </span>
             </>
           )}
           {toggles.bb && (
             <span className="flex items-center gap-1 text-blue-500 font-bold">
-              <span className="inline-block size-2 rounded-full bg-blue-500" />
-              볼린저밴드 <span className="font-sans font-normal text-[10px] text-muted-foreground">(20, 2)</span>
+              <span className="inline-block size-1.5 sm:size-2 rounded-full bg-blue-500" />
+              BB<span className="hidden sm:inline font-sans font-normal text-[10px] text-muted-foreground">(20,2)</span>
             </span>
           )}
         </div>

@@ -20,11 +20,11 @@ type Props = {
 
 export function QuickPills({ selectedCode, onSelect }: Props) {
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
-      <span className="shrink-0 font-bold text-muted-foreground flex items-center gap-1">
+    <div className="flex items-center gap-2 overflow-x-auto pb-0.5 text-xs no-scrollbar scrollbar-none whitespace-nowrap w-full">
+      <span className="shrink-0 font-bold text-muted-foreground flex items-center gap-1 text-[11px]">
         ⚡ 인기종목:
       </span>
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1.5 shrink-0">
         {POPULAR_STOCKS.map((stock) => {
           const isSelected = stock.code === selectedCode
           return (

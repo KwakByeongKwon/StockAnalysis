@@ -241,81 +241,81 @@ export function MockTradingDashboard({ initialCode = "005930", onSelectStockForA
           </div>
         </div>
 
-        {/* 4대 계좌 요약 카드 그리드 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* 4대 계좌 요약 카드 그리드 (모바일 2x2 배치로 시원하게) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
           {/* 1. 총 평가자산 */}
-          <div className="rounded-xl border border-border bg-muted/20 p-4 flex flex-col justify-between">
-            <span className="text-xs font-bold text-muted-foreground">총 평가자산</span>
-            <div className="my-1.5">
-              <div className="text-2xl font-black font-mono text-foreground">
+          <div className="rounded-xl border border-border bg-muted/20 p-3 sm:p-4 flex flex-col justify-between">
+            <span className="text-[11px] sm:text-xs font-bold text-muted-foreground">총 평가자산</span>
+            <div className="my-1 sm:my-1.5">
+              <div className="text-lg sm:text-2xl font-black font-mono text-foreground truncate">
                 {formatKRW(totalAssets)}원
               </div>
               <div
                 className={cn(
-                  "flex items-center gap-1 text-xs font-bold font-mono mt-0.5",
+                  "flex items-center gap-0.5 sm:gap-1 text-[10px] sm:text-xs font-bold font-mono mt-0.5",
                   isProfit ? "text-[var(--up)]" : "text-[var(--down)]",
                 )}
               >
-                {isProfit ? <ArrowUpRight className="size-3.5" /> : <ArrowDownRight className="size-3.5" />}
-                <span>
+                {isProfit ? <ArrowUpRight className="size-3 sm:size-3.5" /> : <ArrowDownRight className="size-3 sm:size-3.5" />}
+                <span className="truncate">
                   {isProfit ? "+" : ""}
                   {formatKRW(totalReturn)}원 ({isProfit ? "+" : ""}
                   {totalReturnRate}%)
                 </span>
               </div>
             </div>
-            <span className="text-[10px] text-muted-foreground">시드머니: {formatKRW(account.seedMoney)}원</span>
+            <span className="text-[9px] sm:text-[10px] text-muted-foreground truncate">원금: {formatKRW(account.seedMoney)}원</span>
           </div>
 
           {/* 2. 보유 현금 예수금 */}
-          <div className="rounded-xl border border-border bg-muted/20 p-4 flex flex-col justify-between">
-            <span className="text-xs font-bold text-muted-foreground">보유 예수금 (주문 가능)</span>
-            <div className="my-1.5">
-              <div className="text-2xl font-black font-mono text-foreground">
+          <div className="rounded-xl border border-border bg-muted/20 p-3 sm:p-4 flex flex-col justify-between">
+            <span className="text-[11px] sm:text-xs font-bold text-muted-foreground">보유 예수금</span>
+            <div className="my-1 sm:my-1.5">
+              <div className="text-lg sm:text-2xl font-black font-mono text-foreground truncate">
                 {formatKRW(account.cashBalance)}원
               </div>
-              <div className="text-xs text-muted-foreground font-mono mt-0.5">
-                자산 비중 {totalAssets > 0 ? ((account.cashBalance / totalAssets) * 100).toFixed(1) : 100}%
+              <div className="text-[10px] sm:text-xs text-muted-foreground font-mono mt-0.5">
+                현금 비중 {totalAssets > 0 ? ((account.cashBalance / totalAssets) * 100).toFixed(1) : 100}%
               </div>
             </div>
-            <span className="text-[10px] text-muted-foreground">즉시 가상 매수 가능 현금</span>
+            <span className="text-[9px] sm:text-[10px] text-muted-foreground truncate">주문 가능 현금</span>
           </div>
 
           {/* 3. 총 주식 평가금액 */}
-          <div className="rounded-xl border border-border bg-muted/20 p-4 flex flex-col justify-between">
-            <span className="text-xs font-bold text-muted-foreground">보유 주식 평가금액</span>
-            <div className="my-1.5">
-              <div className="text-2xl font-black font-mono text-foreground">
+          <div className="rounded-xl border border-border bg-muted/20 p-3 sm:p-4 flex flex-col justify-between">
+            <span className="text-[11px] sm:text-xs font-bold text-muted-foreground">보유 주식 평가금액</span>
+            <div className="my-1 sm:my-1.5">
+              <div className="text-lg sm:text-2xl font-black font-mono text-foreground truncate">
                 {formatKRW(totalStockValue)}원
               </div>
               <div
                 className={cn(
-                  "text-xs font-bold font-mono mt-0.5",
+                  "text-[10px] sm:text-xs font-bold font-mono mt-0.5 truncate",
                   totalUnrealizedPnL >= 0 ? "text-[var(--up)]" : "text-[var(--down)]",
                 )}
               >
-                평가손익: {totalUnrealizedPnL >= 0 ? "+" : ""}
+                손익: {totalUnrealizedPnL >= 0 ? "+" : ""}
                 {formatKRW(totalUnrealizedPnL)}원
               </div>
             </div>
-            <span className="text-[10px] text-muted-foreground">
-              총 {holdingsList.length}개 종목 보유 중
+            <span className="text-[9px] sm:text-[10px] text-muted-foreground truncate">
+              {holdingsList.length}개 종목 보유 중
             </span>
           </div>
 
           {/* 4. 체결 매매 통계 */}
-          <div className="rounded-xl border border-border bg-muted/20 p-4 flex flex-col justify-between">
-            <span className="text-xs font-bold text-muted-foreground">누적 매매 체결</span>
-            <div className="my-1.5">
-              <div className="text-2xl font-black font-mono text-foreground">
+          <div className="rounded-xl border border-border bg-muted/20 p-3 sm:p-4 flex flex-col justify-between">
+            <span className="text-[11px] sm:text-xs font-bold text-muted-foreground">누적 매매 체결</span>
+            <div className="my-1 sm:my-1.5">
+              <div className="text-lg sm:text-2xl font-black font-mono text-foreground truncate">
                 {account.history.length}건
               </div>
-              <div className="text-xs text-muted-foreground mt-0.5">
-                수수료율: <b className="font-mono text-foreground">0.20%</b> (거래세 반영)
+              <div className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 truncate">
+                수수료: <b className="font-mono text-foreground">0.20%</b> (거래세 포함)
               </div>
             </div>
-            <span className="text-[10px] text-muted-foreground truncate">
-              최근 개설: {account.lastResetAt.slice(0, 10)}
+            <span className="text-[9px] sm:text-[10px] text-muted-foreground truncate">
+              개설: {account.lastResetAt.slice(0, 10)}
             </span>
           </div>
         </div>

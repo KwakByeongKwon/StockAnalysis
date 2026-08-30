@@ -143,8 +143,8 @@ export function MarketScreener({ onSelectStock }: Props) {
           </div>
         </div>
 
-        {/* 4대 카테고리 탭 스위처 */}
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+        {/* 3대 카테고리 탭 스위처 (모바일 3분할 꽉 찬 배치) */}
+        <div className="grid grid-cols-3 gap-2">
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon
             const active = category === cat.id
@@ -154,14 +154,14 @@ export function MarketScreener({ onSelectStock }: Props) {
                 type="button"
                 onClick={() => handleCategoryChange(cat.id)}
                 className={cn(
-                  "flex items-center justify-center gap-2 rounded-xl border p-3 text-xs font-bold transition-all",
+                  "flex items-center justify-center gap-1 sm:gap-2 rounded-xl border p-2 sm:p-3 text-[11px] sm:text-xs font-bold transition-all whitespace-nowrap cursor-pointer",
                   active
                     ? `${cat.color} ring-2 ring-primary/20 shadow-xs scale-[1.02]`
                     : "border-border/70 bg-muted/30 text-muted-foreground hover:bg-muted/70 hover:text-foreground",
                 )}
               >
-                <Icon className="size-4 shrink-0" />
-                <span>{cat.label}</span>
+                <Icon className="size-3.5 sm:size-4 shrink-0" />
+                <span className="truncate">{cat.label}</span>
               </button>
             )
           })}
