@@ -1,5 +1,6 @@
 {
   "buildCommand": "cd stock-analysis-charts && npm install && npm run build",
   "outputDirectory": "stock-analysis-charts/.next",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "installCommand": "npm install"
 }
